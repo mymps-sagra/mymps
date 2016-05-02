@@ -1,0 +1,25 @@
+{% if is_paginated %}
+  <div class="pagination">
+    <span class="page-links">
+      <a href="{% url url_list %}?page=1">Первая</a>
+      <a href=
+        {% if page_obj.has_previous %}
+          "{% url url_list %}?page={{ page_obj.previous_page_number }}"
+        {% else %}          
+          "{% url url_list %}?page=1"
+        {% endif %}
+        >Предыдущая</a>
+      <span class="page-current">
+        &nbsp{{ page_obj.number }}/{{ page_obj.paginator.num_pages }}&nbsp
+      </span>
+      {% if page_obj.has_next %}
+        <a href="{% url url_list %}?page={{ page_obj.next_page_number }}">
+          Следующая</a>
+      {% endif %}
+      {% if page_obj.paginator.num_pages > page_obj.number  %}
+        <a href="{% url url_list %}?page={{ page_obj.paginator.num_pages }}">
+          Последняя</a>
+      {% endif %}
+    </span>
+  </div>
+{% endif %}

@@ -1,0 +1,47 @@
+{% extends "refer/app_main.html" %}
+{% block title %}{{ model_verbose_name_plural }}{% endblock %}
+{% block main %}
+  <table class="refer-table">
+    <caption>{{ model_verbose_name_plural }}
+      {% if can.add %}
+        <a href="{% url "format_add" %}?page={{ page_obj.number }}">Добавить</a>
+      {% endif %}
+{% include "common/pagination.html" with url_list="format_list" %}
+    </caption>
+    <thead>
+    <tr>
+      <th>{{ fields_verbose_name.name }}</th>
+      <th>{{ fields_verbose_name.design }}</th>
+      <th>{{ fields_verbose_name.packing }}</th>
+      <th>{{ fields_verbose_name.unit }}</th>
+      <th>{{ fields_verbose_name.precision }}</th>
+      <th>{{ fields_verbose_name.accessability }}</th>
+      <th>{{ fields_verbose_name.modifyed }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td>
+          <a href=
+            {% if can.edit %}
+              "{% url "format_edit" pk=object.pk %}?page={{ page_obj.number }}"
+            {% else %}
+              "{% url "format_detail" pk=object.pk %}?page={{ page_obj.number }}"
+            {% endif %}
+            >{{ object.name }}</a>
+        </td>
+        <td>{{ object.design }}</td>
+        <td>{{ object.packing }}</td>
+        <td>{{ object.unit }}</td>
+        <td>{{ object.precision }}</td>
+        <td class="centered">
+          {% if object.accessability %}&#10004;{% endif %}</td>
+        <td>{{ object.modifyed|date:"SHORT_DATETIME_FORMAT" }}</td>
+      </tr>
+    {% empty %}
+      <p>Нет данных</p>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "income/app_main.html" %}
+{% block title %}{{ model_verbose_name_plural }}{% endblock %}
+{% block main %}
+  <table class="refer-table">
+    <caption>{{ model_verbose_name_plural }}
+      {% if can.add %}
+        <a href="{% url "delivery_add" %}?page={{ page_obj.number }}">Добавить</a>
+      {% endif %}
+{% include "common/pagination.html" with url_list="delivery_list" %}
+    </caption>
+    <thead>
+    <tr>
+      <th>{{ fields_verbose_name.date }}</th>
+      <th>{{ fields_verbose_name.name }}</th>
+      <th>{{ fields_verbose_name.type }}</th>
+      <th>{{ fields_verbose_name.supplier }}</th>
+      <th>{{ fields_verbose_name.accessability }}</th>
+      <th>{{ fields_verbose_name.executed }}</th>
+      <th>{{ fields_verbose_name.modifyed }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td>{{ object.date|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>
+          <a href=
+            "{% url "delivery_detail" pk=object.pk %}?page={{ page_obj.number }}&back_url=delivery_list&success_url=delivery_list"
+            >{{ object.name }}</a>
+        </td>
+        <td>{{ object.type|default_if_none:"--------" }}</td>
+        <td>{{ object.supplier|default_if_none:"--------" }}</td>
+        <td class="centered">
+          {% if object.accessability %}&#10004;{% endif %}</td>
+        <td class="centered">
+          {% if object.executed %}&#10004;{% endif %}</td>
+        <td>{{ object.modifyed|date:"SHORT_DATETIME_FORMAT" }}</td>
+      </tr>
+    {% empty %}
+      <p>Нет данных</p>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

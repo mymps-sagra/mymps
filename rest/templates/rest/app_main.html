@@ -1,0 +1,19 @@
+{% extends "main.html" %}
+{% block submenu %}
+  <h3>{{ app_name }}</h3>
+  <ul>
+    {% for object in submenus %}
+      {% if object.param != "" %}
+        {% url object.url object.param as page_url %}
+      {% else %}
+        {% url object.url as page_url %}
+      {% endif %}
+      <li>
+        <a href="{{ page_url }}"
+          {% if page_url == current_url %} class="current"{% endif %}>
+          {{ object.model_name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

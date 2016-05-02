@@ -1,0 +1,24 @@
+{% extends "refer/app_main.html" %}
+{% block title %}{{ model_verbose_name }}{% endblock %}
+{% block main %}
+  <table class="refer-table">
+    <caption>{{ model_verbose_name_plural }}</caption>
+    <tr>
+      <th>{{ fields_verbose_name.name }}</th>
+      <th>{{ fields_verbose_name.code }}</th>
+      <th>{{ fields_verbose_name.accessability }}</th>
+      <th>{{ fields_verbose_name.created }}</th>
+      <th>{{ fields_verbose_name.modifyed }}</th>
+    </tr>
+    {% for object in objects %}
+      <tr>
+        <td>{{ object.name }}</td>
+        <td>{{ object.code }}</td>
+        <td class="centered">
+          {% if object.accessability %}&#10004;{% endif %}</td>
+        <td>{{ object.created|date:"SHORT_DATETIME_FORMAT" }}</td>
+        <td>{{ object.modifyed|date:"SHORT_DATETIME_FORMAT" }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

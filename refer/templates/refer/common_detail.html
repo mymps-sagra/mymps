@@ -1,0 +1,23 @@
+{% extends "refer/refer_menu.html" %}
+{% block title %}{{ model_verbose_name }}:{{ object.id }}{% endblock %}
+{% block submenu %}
+  <h3>{{ model_verbose_name }}</h3>
+  {% if object.id %}
+  <h3>{{ fields_verbose_name.id }}:{{ object.id }}</h3>
+  <h3>{{ fields_verbose_name.created }}:</h3>
+  <h3>{{ object.created|date:"SHORT_DATETIME_FORMAT" }}</h3>
+  {% endif %}
+  <ul>
+  <li><a href="{% url model_list %}?page={{ pn }}">Назад</a>
+  </li>
+  </ul>
+{% endblock %}
+{% block main %}
+<form class="form-refer" method="post" action="" >
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if form_edit %}
+    <div class="submit-button"><input type="submit" value="Сохранить"></div>
+  {% endif %}
+</form>
+{% endblock %}

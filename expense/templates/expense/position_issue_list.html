@@ -1,0 +1,42 @@
+{% extends "expense/app_main.html" %}
+{% block title %}{{ model_verbose_name_plural }}{% endblock %}
+{% block main %}
+  <table class="refer-table">
+    <caption>{{ model_verbose_name_plural }}
+{% include "common/pagination.html" with url_list="position_issue_list" %}
+    </caption>
+    <thead>
+    <tr>
+      <th>{{ fields_verbose_name.item }}</th>
+      <th>{{ fields_verbose_name.packing }}</th>
+      <th>{{ fields_verbose_name.unit }}</th>
+      <th>{{ fields_verbose_name.quantity }}</th>
+      <th>{{ expense_Issue_fields_verbose_name.date }}</th>
+      <th>{{ expense_Issue_model_verbose_name }}</th>
+      <th>{{ expense_Issue_fields_verbose_name.executed }}</th>
+      <th>{{ fields_verbose_name.modifyed }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td>{{ object.item|default_if_none:"--------" }}</td>
+        <td>{{ object.packing }}</td>
+        <td>{{ object.unit }}</td>
+        <td class="centered">{{ object.quantity|floatformat:"-6" }}</td>
+        <td>{{ object.issue.date|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>
+          <a href=
+              "{% url "issue_detail" pk=object.issue.pk %}?page={{ page_obj.number }}&back_url=position_issue_list&success_url=position_issue_list"
+            >{{ object.issue.name }}</a>
+        </td>
+        <td class="centered">
+          {% if object.issue.executed %}&#10004;{% endif %}</td>
+        <td>{{ object.modifyed|date:"SHORT_DATETIME_FORMAT" }}</td>
+      </tr>
+    {% empty %}
+      <p>Нет данных</p>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

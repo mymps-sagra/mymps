@@ -1,0 +1,41 @@
+{% extends "rest/rest_menu.html" %}
+{% block title %}{{ model_verbose_name }}:{{ object.id }}{% endblock %}
+{% block submenu %}
+  <h3>{{ model_verbose_name }}</h3>
+  {% if object.id %}
+  <h3>{{ fields_verbose_name.id }}:{{ object.id }}</h3>
+  <h3>{{ fields_verbose_name.created }}:</h3>
+  <h3>{{ object.created|date:"SHORT_DATETIME_FORMAT" }}</h3>
+  {% endif %}
+  <ul>
+  {% if form_edit %}
+    {% if object.id %}
+    <li><a href="{% url 'period_detail' pk=object.pk %}?page={{ pn }}">Отказ</a>
+    </li>
+    {% else %}
+    <li><a href="{% url 'period_list' %}?page={{ pn }}">Отказ</a>
+    </li>
+    {% endif %}
+  {% else %}
+    <li><a href="{% url 'period_list' %}?page={{ pn }}">Назад</a>
+    </li>
+    {% if can.edit %}
+    <li><a href="{% url 'period_edit' pk=object.pk %}?page={{ pn }}">Исправить</a>
+    </li>
+    {% endif %}
+    <li><a href="{% url 'turnover_list' object.pk %}">Обороты</a>
+    </li>
+    <li><a href="{% url 'rest_list' object.pk %}">Остатки</a>
+    </li>
+    {% endif %}
+  </ul>
+{% endblock %}
+{% block main %}
+<form class="form-refer" method="post" action="" >
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if form_edit %}
+    <div class="submit-button"><input type="submit" value="Сохранить"></div>
+  {% endif %}
+</form>
+{% endblock %}

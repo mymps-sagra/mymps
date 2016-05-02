@@ -1,0 +1,26 @@
+      {% if period %}
+        <p> Период: {{ period.name }} </p>
+        <p> По дату: {{ period.date_to }} </p>
+      {% endif %}
+      <th>{{ fields_verbose_name.item }}</th>
+      <th>{{ fields_verbose_name.store }}</th>
+      <th>{{ fields_verbose_name.target }}</th>
+      <th>{{ fields_verbose_name.part }}</th>
+      <th>{{ fields_verbose_name.design }}</th>
+      <th>{{ fields_verbose_name.packing }}</th>
+      <th>{{ fields_verbose_name.unit }}</th>
+      <th>{{ fields_verbose_name.rest_total }}</th>
+    {% for object in object_list %}
+        <td>{{ object.item }}</td>
+        <td>{{ object.store|default_if_none:"----" }}</td>
+        <td>{{ object.target|default_if_none:"----" }}</td>
+        <td>{{ object.part|default_if_none:"----" }}</td>
+        <td>{{ object.design|default_if_none:"----" }}</td>
+        <td>{{ object.packing }}</td>
+        <td>{{ object.unit }}</td>
+        {% with number=object.rest_total %}
+        <td class="centered"><div {% if number < 0 %} class="negative"{% endif %}>{% if number == 0 %} - {% else %}{{ number|floatformat:"-6" }}{% endif %}</div></td>
+        {% endwith %}
+    {% empty %}
+      <p>Нет данных</p>
+    {% endfor %}

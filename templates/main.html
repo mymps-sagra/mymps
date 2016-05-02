@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block additional_css %}
+  <link type="text/css" href="{% static "css/main.css" %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+  <div id="header">
+    <h1>Учет медсредств</h1>
+  </div>
+  <div id="mainmenu">
+    <ul>
+      {% url "main" as page_url %}
+      <li><a href="{{ page_url }}"{% if page_url == current_url %} class="current"{% endif %}>Главная</a></li>
+      {% url "income" as page_url %}
+      <li><a href="{{ page_url }}"{% if page_url in current_url %} class="current"{% endif %}>Приход</a></li>
+      <li>-</li>
+      {% url "expense" as page_url %}
+      <li><a href="{{ page_url }}"{% if page_url in current_url %} class="current"{% endif %}>Расход</a></li>
+      <li>=</li>
+      {% url "rest" as page_url %}
+      <li><a href="{{ page_url }}"{% if page_url in current_url %} class="current"{% endif %}>Остаток</a></li>
+      {% url "refer" as page_url %}
+      <li><a href="{{ page_url }}"{% if page_url in current_url %} class="current"{% endif %}>Справочники</a></li>
+      {% url "logout" as page_url %}
+      <li><a href="{{ page_url }}"{% if page_url == current_url %} class="current"{% endif %}>Выход</a></li>
+    </ul>
+  </div>
+  <div id="mainbody">
+    <div id="submenu">
+      {% block submenu %}
+      {% endblock %}
+    </div>
+    <div id="main">
+      {% block main %}
+      {% endblock %}
+    </div>
+  </div>
+  <div id="footer">
+    <p>Портал в процессе разработки.</p>
+  </div>
+{% endblock %}

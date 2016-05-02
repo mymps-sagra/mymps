@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block additional_css %}
+  <link type="text/css" href="{% static "css/home.css" %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+  <div id="header">
+    <h1>Учет медсредств</h1>
+  </div>
+  <div id="homemenu">
+    <ul>
+      {% url "login" as page_url %}
+      <li><a href="{{ page_url }}">Вход</a></li>
+    </ul>
+  </div>
+  <div id="home">
+    {% block home %}
+    {% endblock %}
+  </div>
+  <div id="footer">
+    <p>Портал в процессе разработки.</p>
+  </div>
+{% endblock %}

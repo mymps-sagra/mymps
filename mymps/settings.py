@@ -37,6 +37,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'home',
+    'main',
+    'refer',
+    'income',
+    'rest',
+    'expense',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,7 +61,9 @@ ROOT_URLCONF = 'mymps.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR + '/templates/',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,7 +95,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'Etc/GMT+5'
+TIME_ZONE = 'Etc/GMT-5'
 
 USE_I18N = True
 
@@ -100,3 +108,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# my options
+
+STATICFILES_DIRS = ( 
+BASE_DIR + '/static/',
+)
+
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"
+LOGIN_REDIRECT_URL = '/main'
+
+MEDIA_ROOT = BASE_DIR + '/media/'
+MEDIA_URL = '/media/'
