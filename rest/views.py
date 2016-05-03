@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.http import Http404
+from django.conf import settings
 from common.mycontext import MyContextMixin, MyPageNumberContextMixin, \
     MyModelContextMixin, MyModelSetContextMixin
 from rest.models import Period, Turnover, Rest
@@ -357,7 +358,8 @@ class RestList(ListView, MyPageNumberContextMixin, MyModelContextMixin,
 def rest_get(request, *args, **kwargs):
     template = APP + "/rest_get_content.xml"
     zip_name =  "rest_get.zip"
-    zip_file = APP + "/templates/" + APP + "/" + zip_name
+    base_dir = settings.BASE_DIR + "/"
+    zip_file = base_dir + APP + "/templates/" + APP + "/" + zip_name
     if request.method == 'GET':
         period = model_object_get(Period, **kwargs)
         queryset = rest_get_queryset_sql(period)
@@ -366,7 +368,8 @@ def rest_get(request, *args, **kwargs):
         content = render_to_string(template, context)
         #temp_dir = "temp"
         #if True:
-        with tempfile.TemporaryDirectory(dir='temp') as temp_dir:
+        #print("BASE_DIR =", settings.BASE_DIR)
+        with tempfile.TemporaryDirectory(dir=base_dir+'temp') as temp_dir:
             #print(temp_dir)
             shutil.copy2(zip_file, temp_dir)
             with ZipFile(temp_dir + "/" + zip_name, "a") as temp_file:
