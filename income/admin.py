@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from income.models import Delivery, Position_delivery
+from .models import Delivery, Position_delivery
 
 
 class DeliveryAdmin(admin.ModelAdmin):

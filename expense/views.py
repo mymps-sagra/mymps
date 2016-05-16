@@ -11,8 +11,8 @@ from common.mycontext import MyContextMixin, MyPageNumberContextMixin, \
     MyModelContextMixin, MyModelSetContextMixin
 from common.views import CommonPositionSetGet, CommonPositionSetAdd, \
     CommonPositionSetDetail, CommonPositionSetEdit
-from expense.models import Issue, Position_issue
-from expense.forms import IssueForm, PositionForm
+from .models import Issue, Position_issue
+from .forms import IssueForm, PositionForm
 
 APP = 'expense'
 

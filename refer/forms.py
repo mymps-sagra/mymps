@@ -1,7 +1,7 @@
 from django import forms
 
-from refer.models import Base, Supplier, Design, Packing, Unit, Format, Item
-from refer.models import Manufacturer, Store, Target, Part, Consumer
+from .models import Base, Supplier, Design, Packing, Unit, Format, Item
+from .models import Manufacturer, Store, Target, Part, Consumer
 
 class BaseForm(forms.ModelForm):
     

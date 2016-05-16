@@ -1,6 +1,6 @@
 from django import forms
 
-from income.models import Delivery, Position_delivery
+from .models import Delivery, Position_delivery
 
 
 class DeliveryForm(forms.ModelForm):

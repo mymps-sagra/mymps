@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from expense.models import Issue, Position_issue
+from .models import Issue, Position_issue
 
 
 class IssueAdmin(admin.ModelAdmin):

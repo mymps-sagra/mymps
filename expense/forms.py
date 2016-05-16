@@ -1,6 +1,6 @@
 from django import forms
 
-from expense.models import Issue, Position_issue
+from .models import Issue, Position_issue
 
 
 class IssueForm(forms.ModelForm):

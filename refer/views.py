@@ -10,32 +10,32 @@ from django.apps import apps
 from django.views.generic.base import ContextMixin
 from common.mycontext import MyContextMixin, MyPageNumberContextMixin, \
     MyModelContextMixin
-from refer.models import TypeBase, Base
-from refer.forms import BaseForm
-from refer.models import TypeSupplier, Supplier
-from refer.forms import SupplierForm
-from refer.models import TypeDesign, Design
-from refer.forms import DesignForm
-from refer.models import TypePacking, Packing
-from refer.forms import PackingForm
-from refer.models import TypeUnit, Unit
-from refer.forms import UnitForm
-from refer.models import Format
-from refer.forms import FormatForm
-from refer.models import TypeItem, Item
-from refer.forms import ItemForm
-from refer.models import TypeManufacturer, Manufacturer
-from refer.forms import ManufacturerForm
-from refer.models import TypeStore, Store
-from refer.forms import StoreForm
-from refer.models import TypeTarget, Target
-from refer.forms import TargetForm
-from refer.models import TypeDelivery
-from refer.models import TypePart, Part
-from refer.forms import PartForm
-from refer.models import TypeConsumer, Consumer
-from refer.forms import ConsumerForm
-from refer.models import TypeIssue
+from .models import TypeBase, Base
+from .forms import BaseForm
+from .models import TypeSupplier, Supplier
+from .forms import SupplierForm
+from .models import TypeDesign, Design
+from .forms import DesignForm
+from .models import TypePacking, Packing
+from .forms import PackingForm
+from .models import TypeUnit, Unit
+from .forms import UnitForm
+from .models import Format
+from .forms import FormatForm
+from .models import TypeItem, Item
+from .forms import ItemForm
+from .models import TypeManufacturer, Manufacturer
+from .forms import ManufacturerForm
+from .models import TypeStore, Store
+from .forms import StoreForm
+from .models import TypeTarget, Target
+from .forms import TargetForm
+from .models import TypeDelivery
+from .models import TypePart, Part
+from .forms import PartForm
+from .models import TypeConsumer, Consumer
+from .forms import ConsumerForm
+from .models import TypeIssue
 
 APP = 'refer'
 

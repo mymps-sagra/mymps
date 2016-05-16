@@ -4,7 +4,7 @@
 """
 from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
-from main.views import MainPage
+from .views import MainPage
 
 
 urlpatterns = [

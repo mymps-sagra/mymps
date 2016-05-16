@@ -4,32 +4,32 @@
 """
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from refer.views import ReferMenu
-from refer.views import TypeBasePage
-from refer.views import BaseList, BaseAdd, BaseDetail, BaseEdit
-from refer.views import TypeSupplierPage
-from refer.views import SupplierList, SupplierAdd, SupplierDetail, SupplierEdit
-from refer.views import TypeDesignPage
-from refer.views import DesignList, DesignAdd, DesignDetail, DesignEdit
-from refer.views import TypePackingPage
-from refer.views import PackingList, PackingAdd, PackingDetail, PackingEdit
-from refer.views import TypeUnitPage
-from refer.views import UnitList, UnitAdd, UnitDetail, UnitEdit
-from refer.views import FormatList, FormatAdd, FormatDetail, FormatEdit
-from refer.views import TypeItemPage
-from refer.views import ItemList, ItemAdd, ItemDetail, ItemEdit
-from refer.views import TypeManufacturerPage
-from refer.views import ManufacturerList, ManufacturerAdd, ManufacturerDetail, ManufacturerEdit
-from refer.views import TypeStorePage
-from refer.views import StoreList, StoreAdd, StoreDetail, StoreEdit
-from refer.views import TypeTargetPage
-from refer.views import TargetList, TargetAdd, TargetDetail, TargetEdit
-from refer.views import TypeDeliveryPage
-from refer.views import TypePartPage
-from refer.views import PartList, PartAdd, PartDetail, PartEdit
-from refer.views import TypeConsumerPage
-from refer.views import ConsumerList, ConsumerAdd, ConsumerDetail, ConsumerEdit
-from refer.views import TypeIssuePage
+from .views import ReferMenu
+from .views import TypeBasePage
+from .views import BaseList, BaseAdd, BaseDetail, BaseEdit
+from .views import TypeSupplierPage
+from .views import SupplierList, SupplierAdd, SupplierDetail, SupplierEdit
+from .views import TypeDesignPage
+from .views import DesignList, DesignAdd, DesignDetail, DesignEdit
+from .views import TypePackingPage
+from .views import PackingList, PackingAdd, PackingDetail, PackingEdit
+from .views import TypeUnitPage
+from .views import UnitList, UnitAdd, UnitDetail, UnitEdit
+from .views import FormatList, FormatAdd, FormatDetail, FormatEdit
+from .views import TypeItemPage
+from .views import ItemList, ItemAdd, ItemDetail, ItemEdit
+from .views import TypeManufacturerPage
+from .views import ManufacturerList, ManufacturerAdd, ManufacturerDetail, ManufacturerEdit
+from .views import TypeStorePage
+from .views import StoreList, StoreAdd, StoreDetail, StoreEdit
+from .views import TypeTargetPage
+from .views import TargetList, TargetAdd, TargetDetail, TargetEdit
+from .views import TypeDeliveryPage
+from .views import TypePartPage
+from .views import PartList, PartAdd, PartDetail, PartEdit
+from .views import TypeConsumerPage
+from .views import ConsumerList, ConsumerAdd, ConsumerDetail, ConsumerEdit
+from .views import TypeIssuePage
 
 
 urlpatterns = [

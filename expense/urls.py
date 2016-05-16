@@ -4,9 +4,9 @@
 """
 from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
-from expense.views import ExpenseMenu
-from expense.views import IssueList, IssueAdd, IssueDetail, IssueEdit
-from expense.views import PositionList
+from .views import ExpenseMenu
+from .views import IssueList, IssueAdd, IssueDetail, IssueEdit
+from .views import PositionList
 
 
 urlpatterns = [

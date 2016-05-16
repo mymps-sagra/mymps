@@ -1,20 +1,20 @@
 from django.contrib import admin
 
 # Register your models here.
-from refer.models import TypeBase, Base
-from refer.models import TypeSupplier, Supplier
-from refer.models import TypeDesign, Design
-from refer.models import TypePacking, Packing
-from refer.models import TypeUnit, Unit
-from refer.models import Format
-from refer.models import TypeItem, Item
-from refer.models import TypeManufacturer, Manufacturer
-from refer.models import TypeStore, Store
-from refer.models import TypeTarget, Target
-from refer.models import TypeDelivery
-from refer.models import TypePart, Part
-from refer.models import TypeConsumer, Consumer
-from refer.models import TypeIssue
+from .models import TypeBase, Base
+from .models import TypeSupplier, Supplier
+from .models import TypeDesign, Design
+from .models import TypePacking, Packing
+from .models import TypeUnit, Unit
+from .models import Format
+from .models import TypeItem, Item
+from .models import TypeManufacturer, Manufacturer
+from .models import TypeStore, Store
+from .models import TypeTarget, Target
+from .models import TypeDelivery
+from .models import TypePart, Part
+from .models import TypeConsumer, Consumer
+from .models import TypeIssue
 
 
 class ReferCommonAdmin(admin.ModelAdmin):

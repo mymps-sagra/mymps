@@ -1,6 +1,6 @@
 from django import forms
 
-from rest.models import Period, Turnover, Rest
+from .models import Period, Turnover, Rest
 
 
 class PeriodForm(forms.ModelForm):

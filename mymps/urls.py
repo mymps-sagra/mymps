@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^income/', include('income.urls')),
     url(r'^rest/', include('rest.urls')),
     url(r'^expense/', include('expense.urls')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/', include('api.urls')),
 ]

@@ -18,13 +18,13 @@ from django.http import Http404
 from django.conf import settings
 from common.mycontext import MyContextMixin, MyPageNumberContextMixin, \
     MyModelContextMixin, MyModelSetContextMixin
-from rest.models import Period, Turnover, Rest
 from refer.views import CommonEdit, CommonDetail
-from rest.forms import PeriodForm, TurnoverForm, RestForm
-import datetime
-import tempfile
-import os
-import shutil
+from .models import Period, Turnover, Rest
+from .forms import PeriodForm, TurnoverForm, RestForm
+from datetime import datetime
+from tempfile import TemporaryDirectory
+#import os
+from shutil import copy2
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
@@ -103,7 +103,7 @@ def turnover_get_queryset_sql(period):
     #print('targets_id=', targets_id)
     #print(date_from)
     #if not date_from :
-    #    date_from = datetime.datetime.now()
+    #    date_from = datetime.now()
     #print(date_from)
     #group_by_null = \
     #    'IFNULL(item_id, 0) as item_id, ' + \
@@ -136,55 +136,43 @@ def turnover_get_queryset_sql(period):
             where +=  "AND d.target_id IN %s " % str(tuple(targets_id))
     if date_from:
         where_init = "AND d.date < date('%s') " % \
-            datetime.datetime.strftime(date_from, "%Y-%m-%d")
+            datetime.strftime(date_from, "%Y-%m-%d")
         query_init_income = 'SELECT ' + \
-            'p.id as id, %s as period_id, ' + group_by + ', ' +\
+            'p.id as id, ' + group_by + ', ' +\
             'quantity as rest_init, 0 as quantity_in, 0 as quantity_out ' + \
             from_table_income + \
             where + where_init
-        params_init = (
-            period_id,
-        )
-        query_init_income_subs = query_init_income % params_init
         query_init_expense = 'SELECT ' + \
-            'p.id as id, %s as period_id, ' + group_by + ', ' +\
+            'p.id as id, ' + group_by + ', ' +\
             '-quantity as rest_init, 0 as quantity_in, 0 as quantity_out ' + \
             from_table_expense + \
             where + where_init
-        query_init_expense_subs = query_init_expense % params_init
-        query_init_subs = query_init_income_subs + ' UNION ALL ' + \
-            query_init_expense_subs
+        query_init = query_init_income + ' UNION ALL ' + query_init_expense
     else:
-        query_init_subs = None
+        query_init = None
     #print(query_init)
     #print(params_init)
     #print(query_init % params_init)
     where_period =  ""
     if date_from:
         where_period += "AND d.date >= date('%s') " % \
-            datetime.datetime.strftime(date_from, "%Y-%m-%d")
+            datetime.strftime(date_from, "%Y-%m-%d")
     if date_to:
         where_period += "AND d.date <= date('%s') " % \
-            datetime.datetime.strftime(date_to, "%Y-%m-%d")
+            datetime.strftime(date_to, "%Y-%m-%d")
     query_period_income = 'SELECT ' + \
-        'p.id as id, %s as period_id, ' + group_by + ', ' +\
+        'p.id as id, ' + group_by + ', ' +\
         '0 as rest_init, quantity as quantity_in, 0 as quantity_out ' + \
         from_table_income + \
         where + where_period
-    params_period = (
-        period_id,
-    )
-    query_period_income_subs = query_period_income % params_period
     query_period_expense = 'SELECT ' + \
-        'p.id as id, %s as period_id, ' + group_by + ', ' +\
+        'p.id as id, ' + group_by + ', ' +\
         '0 as rest_init, 0 as quantity_in, quantity as quantity_out ' + \
         from_table_expense + \
         where + where_period
-    query_period_expense_subs = query_period_expense % params_period
-    query_period_subs = query_period_income_subs + ' UNION ALL ' + \
-        query_period_expense_subs
-    #print(query_init_subs)
-    #print(query_period_subs)
+    query_period = query_period_income + ' UNION ALL ' + query_period_expense
+    #print(query_init)
+    #print(query_period)
     #
     # SQLite НЕ РАБОТАЕТ СО СЛОВАРЕМ !
     #
@@ -195,23 +183,26 @@ def turnover_get_queryset_sql(period):
     #self.queryset = self.model.objects.raw(query, params)
     # SQLite НЕ ПОЛУЧИЛОСЬ ПЕРЕДАТЬ СПИСОК ПАРАМЕТРОВ !
     #self.queryset = self.model.objects.raw(query_init, params=params_init)
-    query = query_period_subs
-    if query_init_subs:
-        query += ' UNION ALL ' + query_init_subs
+    query = query_period
+    if query_init:
+        query += ' UNION ALL ' + query_init
     #print(query)
     query_group = 'SELECT id, ' + group_by + ', ' +\
         'SUM(rest_init) as rest_init, SUM(quantity_in) as quantity_in, ' + \
         'SUM(quantity_out) as quantity_out ' + \
-        'FROM ( ' + query + ' )' + \
+        'FROM ( ' + query + ' ) ' + \
         'GROUP BY ' + group_by + \
         'HAVING rest_init <> 0 OR quantity_in <> 0 OR quantity_out <> 0 ' 
     #print(query_group)
-    query_sum = 'SELECT *, rest_init + quantity_in - quantity_out as rest_total ' + \
+    query_sum = 'SELECT *, %s as period_id, ' +\
+        'rest_init + quantity_in - quantity_out as rest_total ' + \
         'FROM ( ' + query_group + ' )'
-    queryset = Turnover.objects.raw(query_sum)
+    query_sum_subs = query_sum % period_id
+    queryset = Turnover.objects.raw(query_sum_subs)
     #self.queryset = self.model.objects.raw(query_group)
     #print(self.queryset)
-    return list(queryset)
+    #return list(queryset)
+    return queryset
 
 
 def model_object_get(model, **kwargs):
@@ -242,7 +233,7 @@ class TurnoverList(ListView, MyPageNumberContextMixin, MyModelContextMixin,
 
     def get(self, request, *args, **kwargs):
         self.period = model_object_get(Period, **kwargs)
-        self.queryset = turnover_get_queryset_sql(self.period)
+        self.queryset = list(turnover_get_queryset_sql(self.period))
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -261,7 +252,7 @@ def rest_get_queryset_sql(period):
     stores_only_blank = None
     targets_only_blank = None
     if period:
-        period_id = period_id
+        period_id = period.id
         date_to = period.date_to
         stores_id = [object.id for object in period.stores.all()]
         targets_id = [object.id for object in period.targets.all()]
@@ -291,32 +282,29 @@ def rest_get_queryset_sql(period):
     where_period =  ""
     if date_to:
         where_period += "AND d.date <= date('%s') " % \
-            datetime.datetime.strftime(date_to, "%Y-%m-%d")
+            datetime.strftime(date_to, "%Y-%m-%d")
     query_period_income = 'SELECT ' + \
-        'p.id as id, %s as period_id, ' + group_by + ', ' +\
+        'p.id as id, ' + group_by + ', ' +\
         'quantity as rest_total ' + \
         from_table_income + \
         where + where_period
-    params_period = (
-        period_id,
-    )
-    query_period_income_subs = query_period_income % params_period
     query_period_expense = 'SELECT ' + \
-        'p.id as id, %s as period_id, ' + group_by + ', ' +\
+        'p.id as id, ' + group_by + ', ' +\
         '-quantity as rest_total ' + \
         from_table_expense + \
         where + where_period
-    query_period_expense_subs = query_period_expense % params_period
-    query_period_subs = query_period_income_subs + ' UNION ALL ' + \
-        query_period_expense_subs
-    query = query_period_subs
-    query_group = 'SELECT id, ' + group_by + ', ' +\
+    query_period = query_period_income + ' UNION ALL ' + query_period_expense
+    query_group = 'SELECT id, %s as period_id, ' + group_by + ', ' +\
         'SUM(rest_total) as rest_total ' + \
-        'FROM ( ' + query + ' )' + \
+        'FROM ( ' + query_period + ' ) ' + \
         'GROUP BY ' + group_by + \
-        'HAVING rest_total <> 0 ' 
-    queryset = Rest.objects.raw(query_group)
-    return list(queryset)
+        'HAVING rest_total <> 0 '
+    query_group_subs = query_group % period_id
+    #print(query_group_subs)
+    queryset = Rest.objects.raw(query_group_subs)
+    #print(queryset)
+    #return list(queryset)
+    return queryset
 
 
 class RestList(ListView, MyPageNumberContextMixin, MyModelContextMixin, 
@@ -333,7 +321,7 @@ class RestList(ListView, MyPageNumberContextMixin, MyModelContextMixin,
 
     def get(self, request, *args, **kwargs):
         self.period = model_object_get(Period, **kwargs)
-        self.queryset = rest_get_queryset_sql(self.period)
+        self.queryset = list(rest_get_queryset_sql(self.period))
         #self.queryset = self.get_queryset_sql(period_id)
         #context = {'object_list': self.queryset}
         #content = render_to_string(self.template_all, context)
@@ -362,16 +350,17 @@ def rest_get(request, *args, **kwargs):
     zip_file = base_dir + APP + "/templates/" + APP + "/" + zip_name
     if request.method == 'GET':
         period = model_object_get(Period, **kwargs)
-        queryset = rest_get_queryset_sql(period)
+        queryset = list(rest_get_queryset_sql(period))
+        #print(queryset)
         context = {'object_list': queryset}
         context['period'] = period
         content = render_to_string(template, context)
         #temp_dir = "temp"
         #if True:
         #print("BASE_DIR =", settings.BASE_DIR)
-        with tempfile.TemporaryDirectory(dir=base_dir+'temp') as temp_dir:
+        with TemporaryDirectory(dir=base_dir+'temp') as temp_dir:
             #print(temp_dir)
-            shutil.copy2(zip_file, temp_dir)
+            copy2(zip_file, temp_dir)
             with ZipFile(temp_dir + "/" + zip_name, "a") as temp_file:
                 temp_file.writestr('content.xml', content, ZIP_DEFLATED)
             with open(temp_dir + "/"+ zip_name, "rb")  as temp_file:

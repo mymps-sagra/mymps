@@ -4,9 +4,9 @@
 """
 from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
-from rest.views import RestMenu
-from rest.views import PeriodList, PeriodAdd, PeriodDetail, PeriodAdd, PeriodEdit
-from rest.views import TurnoverList, RestList, rest_get
+from .views import RestMenu
+from .views import PeriodList, PeriodAdd, PeriodDetail, PeriodAdd, PeriodEdit
+from .views import TurnoverList, RestList, rest_get
 
 
 urlpatterns = [
